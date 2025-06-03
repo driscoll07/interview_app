@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-+m+jrif@ucxf1k+p^(joq--(6rr5yta#odl$bfkrw3k2(!1p2-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['interview-app-ku5h.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['https://interview-app-qx75.onrender.com', 'localhost', '127.0.0.1']
 
 
 
