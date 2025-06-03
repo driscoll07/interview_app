@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: interview-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn interview_app.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: interview_app.settings
+      - key: PYTHON_VERSION
+        value: 3.12.1

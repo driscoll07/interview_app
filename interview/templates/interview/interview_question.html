@@ -1,0 +1,114 @@
+{% extends 'interview/base.html' %}
+{% block content %}
+<div class="question-box">
+  <h5>Question {{ question_number }} of {{ total_questions }}</h5>
+
+  <div id="questionText">
+    <p class="mt-3">{{ question.text }}</p>
+  </div>
+
+  <div class="mt-4">
+    <div class="timer" id="timer">Time: 30s</div>
+    <div class="text-muted" id="phase">Reading question...</div>
+    <button id="skipBtn" class="btn btn-sm btn-warning mt-2">Skip Reading Time</button>
+    <button id="submitBtn" class="btn btn-sm btn-success mt-2" style="display: none;" onclick="submitAnswer()">
+      Submit Answer
+    </button>
+  </div>
+</div>
+
+<form id="audioForm" method="post" enctype="multipart/form-data" class="d-none">
+  {% csrf_token %}
+  <input type="hidden" name="question_id" value="{{ question.id }}">
+  <input type="hidden" name="interview_id" value="{{ request.session.interview_session_id }}">
+  <input type="file" name="audio" id="audioFile" accept="audio/webm" required>
+</form>
+
+<script>
+  let readingTime = 30;
+  let answeringTime = 60;
+  let currentTime = readingTime;
+  let inReadingPhase = true;
+  let interval;
+  let mediaRecorder;
+  let audioChunks = [];
+
+  const timerElement = document.getElementById("timer");
+  const phaseElement = document.getElementById("phase");
+  const skipBtn = document.getElementById("skipBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const questionText = document.getElementById("questionText");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    startTimer();
+  });
+
+  function startTimer() {
+    interval = setInterval(() => {
+      currentTime--;
+      timerElement.textContent = `Time: ${currentTime}s`;
+
+      if (currentTime <= 0) {
+        clearInterval(interval);
+        if (inReadingPhase) {
+          startAnswering();
+        } else {
+          submitAnswer();
+        }
+      }
+    }, 1000);
+  }
+
+  skipBtn.addEventListener("click", () => {
+    clearInterval(interval);
+    startAnswering();
+  });
+
+  function startAnswering() {
+    inReadingPhase = false;
+    currentTime = answeringTime;
+    timerElement.textContent = `Time: ${currentTime}s`;
+    phaseElement.textContent = "Recording answer...";
+    skipBtn.style.display = "none";
+    submitBtn.style.display = "inline-block";
+
+    startRecording();
+    startTimer();
+  }
+
+  function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+
+      audioChunks = [];
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioFile = new File([audioBlob], 'answer.webm', { type: 'audio/webm' });
+        const fileInput = document.getElementById("audioFile");
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(audioFile);
+        fileInput.files = dataTransfer.files;
+
+        document.getElementById("audioForm").submit();
+      };
+    });
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+    }
+  }
+
+  function submitAnswer() {
+    clearInterval(interval);
+    stopRecording();
+  }
+</script>
+{% endblock %}

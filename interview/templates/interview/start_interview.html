@@ -1,0 +1,31 @@
+{% extends 'interview/base.html' %}
+
+{% block content %}
+<div class="question-box text-center">
+  <h2 class="mb-3 text-primary">📋 Interview Instructions</h2>
+  
+  <p class="lead">You will get <strong>30 random questions</strong>.</p>
+  <p>⏱️ <strong>30 seconds</strong> to read each question</p>
+  <p>🎙️ <strong>1 minute</strong> to record your spoken answer</p>
+
+  <form id="startForm" method="post" class="mt-4">
+    {% csrf_token %}
+    <button type="button" onclick="requestMic()" class="btn btn-success btn-lg btn-custom w-100">
+      ✅ Start Interview
+    </button>
+  </form>
+</div>
+
+<script>
+  function requestMic() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(() => {
+        console.log("Microphone access granted");
+        document.getElementById("startForm").submit();
+      })
+      .catch(() => {
+        alert("Please allow microphone access to start the interview.");
+      });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'interview/base.html' %}
+{% block content %}
+<h2 class="mb-4">Interview Completed</h2>
+
+<div class="list-group">
+  {% for answer in answers %}
+    <div class="list-group-item question-box">
+      <strong>Q{{ forloop.counter }}:</strong> {{ answer.question.text }}<br>
+
+      <audio controls class="mt-2 w-100">
+        <source src="{{ answer.audio.url }}" type="audio/webm">
+        Your browser does not support the audio element.
+      </audio><br>
+
+      {% if answer.question.answer_text %}
+        <button class="btn btn-sm btn-outline-info mt-2" onclick="this.nextElementSibling.style.display='block'">
+          Show Written Answer
+        </button>
+        <div class="mt-2" style="display:none;">
+          <em>{{ answer.question.answer_text }}</em>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<a href="{% url 'home' %}" class="btn btn-link mt-4">← Back to Home</a>
+{% endblock %}

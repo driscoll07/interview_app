@@ -1,0 +1,30 @@
+{% extends 'interview/base.html' %}
+{% block content %}
+<h2 class="mb-4">All Questions</h2>
+
+<div class="list-group">
+  {% for question in questions %}
+    <div class="list-group-item question-box">
+      <strong>Q{{ forloop.counter }}:</strong> {{ question.text }}<br>
+
+      {% if question.answer_text %}
+        <button class="btn btn-sm btn-outline-info mt-2" onclick="toggleAnswer({{ forloop.counter }})">
+          Show/Hide Answer
+        </button>
+        <div class="mt-2" id="answer-{{ forloop.counter }}" style="display: none;">
+          <em>{{ question.answer_text }}</em>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  function toggleAnswer(id) {
+    const el = document.getElementById(`answer-${id}`);
+    el.style.display = el.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+<a href="{% url 'home' %}" class="btn btn-link mt-4">← Back to Home</a>
+{% endblock %}
