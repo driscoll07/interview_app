@@ -28,6 +28,7 @@ SECRET_KEY = "django-insecure-+m+jrif@ucxf1k+p^(joq--(6rr5yta#odl$bfkrw3k2(!1p2-
 DEBUG = True
 
 ALLOWED_HOSTS = ['interview-app-qx75.onrender.com', 'localhost', '127.0.0.1']
+print("ALLOWED_HOSTS = ", ALLOWED_HOSTS)
 
 
 
@@ -134,7 +135,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-dev-secret")
-DEBUG = os.getenv("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(',')
+# SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-dev-secret")
+# DEBUG = os.getenv("DEBUG", "True") == "True"
+# # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(',')
 
