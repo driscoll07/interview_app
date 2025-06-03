@@ -106,9 +106,12 @@ def interview_result(request):
 
 
 
-def migrate_db(request):
-    call_command("migrate")
-    return HttpResponse("Migrations run.")
+
+
+def load_data(request):
+    call_command("loaddata", "data.json")
+    return HttpResponse("Data loaded into PostgreSQL.")
+
 
 
 

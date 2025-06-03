@@ -11,6 +11,6 @@ urlpatterns = [
     path('interview/result/', views.interview_result, name='interview_result'),
     path('questions/', views.see_questions, name='see_questions'),
 
-    path('migrate/', views.migrate_db),
+    path('load-data/', views.load_data),
 
 ]
