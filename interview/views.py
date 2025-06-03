@@ -3,6 +3,9 @@ from .forms import QuestionForm
 from .models import Question,Question, InterviewSession, Answer 
 import random
 
+from django.core.management import call_command
+from django.http import HttpResponse
+
 
 
 
@@ -99,6 +102,14 @@ def interview_result(request):
         'interview': interview,
         'answers': answers,
     })
+
+
+
+
+def migrate_db(request):
+    call_command("migrate")
+    return HttpResponse("Migrations run.")
+
 
 
 

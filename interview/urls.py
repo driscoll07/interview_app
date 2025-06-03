@@ -10,4 +10,7 @@ urlpatterns = [
     path('interview/question/', views.interview_question, name='interview_question'),
     path('interview/result/', views.interview_result, name='interview_result'),
     path('questions/', views.see_questions, name='see_questions'),
+
+    path('migrate/', views.migrate_db),
+
 ]
