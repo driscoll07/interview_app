@@ -3,8 +3,10 @@ from .forms import QuestionForm
 from .models import Question,Question, InterviewSession, Answer 
 import random
 
+
 from django.core.management import call_command
 from django.http import HttpResponse
+import traceback
 
 
 
@@ -108,9 +110,13 @@ def interview_result(request):
 
 
 
+
 def load_data(request):
-    call_command("loaddata", "data.json")
-    return HttpResponse("Data loaded into PostgreSQL.")
+    try:
+        call_command("loaddata", "data.json", verbosity=2)
+        return HttpResponse("Data loaded into PostgreSQL.")
+    except Exception as e:
+        return HttpResponse(f"Error loading data: {str(e)}<br><pre>{traceback.format_exc()}</pre>", status=500)
 
 
 
